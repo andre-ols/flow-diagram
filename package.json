@@ -8,6 +8,7 @@
     "build": "pnpm -r build",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "pnpm --filter @flow/web exec playwright test",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint ."
   },
