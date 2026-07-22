@@ -73,7 +73,7 @@ class Parser {
     const blocks: AstBlock[] = [];
     while (!this.at("eof")) {
       if (this.at("ident")) {
-        const block = this.parseBlock();
+        const block = this.parseBlock(true);
         if (block) blocks.push(block);
       } else {
         const stray = this.next();
@@ -88,8 +88,13 @@ class Parser {
   /**
    * `keyword id? "label"? { entries }`. Returns null only when the block is so
    * malformed that nothing useful survives; the caller keeps going regardless.
+   *
+   * `topLevel` distinguishes a document-level declaration (`service X {}`),
+   * which always needs an id, from a nested block (`request {}`, `response
+   * {}`), whose id is grammatically optional per the comment on
+   * `parseEntries` — those report nothing when the id is absent.
    */
-  private parseBlock(): AstBlock | null {
+  private parseBlock(topLevel: boolean): AstBlock | null {
     const keywordToken = this.next();
     let id = "";
     let idSpan = keywordToken.span;
@@ -104,7 +109,7 @@ class Parser {
       label = this.next().value;
     }
 
-    if (!id) {
+    if (!id && topLevel) {
       this.diagnostics.push(
         error("missing-id", `"${keywordToken.value}" needs a name.`, keywordToken.span),
       );
@@ -169,7 +174,7 @@ class Parser {
       if (this.at("colon", 1)) {
         entries.push(this.peek().value === "ref" ? this.parseRef() : this.parseProperty());
       } else if (this.at("lbrace", 1) || this.at("lbrace", 2)) {
-        const block = this.parseBlock();
+        const block = this.parseBlock(false);
         if (block) entries.push({ type: "block", block });
       } else if (this.at("arrow", 1)) {
         entries.push(this.parseEdge());
