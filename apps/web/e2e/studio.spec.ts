@@ -46,8 +46,10 @@ test("a node typed into the editor appears on the canvas", async ({ page }) => {
       'flow Charge "Charge" {\n  Billing -> BillingDB : "write"\n}',
   );
 
-  await expect(page.getByText("Billing Service")).toBeVisible();
   await expect(page.getByRole("button", { name: "Charge" })).toBeVisible();
+
+  const canvas = page.locator(".react-flow");
+  await expect(canvas.getByText("Billing Service")).toBeVisible();
 });
 
 test("a syntax error keeps the last valid diagram on screen", async ({ page }) => {
