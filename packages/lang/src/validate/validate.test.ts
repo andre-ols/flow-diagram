@@ -75,6 +75,12 @@ describe("validate", () => {
     expect(codes(src)).toContain("unresolved-table-ref");
   });
 
+  it("flags a nameless table inside a db block", () => {
+    const src = "db D {\n  table {\n    id bigint [pk]\n  }\n}";
+    expect(codes(src)).toContain("missing-id");
+    expect(underlined(src, "missing-id")).toBe("table");
+  });
+
   it("accepts a valid ref", () => {
     const src =
       "db D {\n  table t {\n    id bigint [pk]\n    other bigint [fk]\n  }\n" +

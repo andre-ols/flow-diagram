@@ -140,6 +140,15 @@ function validateBlock(block: AstBlock, shape: BlockShape, diagnostics: Diagnost
             ),
           );
         }
+        if (def.entryMode === "fields" && !entry.block.id) {
+          diagnostics.push(
+            error(
+              "missing-id",
+              `A "${entry.block.keyword}" needs a name.`,
+              entry.block.keywordSpan,
+            ),
+          );
+        }
         validateBlock(
           entry.block,
           {
