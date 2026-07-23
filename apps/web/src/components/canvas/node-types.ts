@@ -22,5 +22,5 @@ export const nodeTypes = {
 } as unknown as NodeTypes;
 
 export function nodeTypeFor(kind: string): string {
-  return kind in nodeTypes ? kind : "fallback";
+  return Object.hasOwn(nodeTypes, kind) ? kind : "fallback";
 }

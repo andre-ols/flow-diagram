@@ -1,6 +1,10 @@
 import { StreamLanguage, type StreamParser } from "@codemirror/language";
+import { defaultRegistry, FLOW_KEYWORD } from "@flow/lang";
 
-const NODE_KEYWORDS = new Set(["screen", "service", "http", "db", "topic", "flow"]);
+// Highlight exactly the node keywords the language defines, plus the structural
+// `flow` keyword. Derived from the registry so a new node type lights up here
+// without editing this file.
+const NODE_KEYWORDS = new Set([...defaultRegistry.keys(), FLOW_KEYWORD]);
 const NESTED_KEYWORDS = new Set(["request", "response", "table", "ref"]);
 
 interface FlowStreamState {

@@ -18,7 +18,12 @@ export interface LayoutResult {
   height: number;
 }
 
-/** A screen is taller because its card shows a mockup thumbnail. */
+/**
+ * Card dimensions by kind. Only kinds whose card differs from the norm need an
+ * entry: `screen` is taller because it shows a mockup thumbnail. Every other
+ * kind — including any not-yet-known kind — falls back to `default` via
+ * `sizeOf`, so this is deliberately not derived from the node registry.
+ */
 export const NODE_SIZE: Record<string, NodeSize> = {
   screen: { width: 260, height: 188 },
   default: { width: 260, height: 116 },
