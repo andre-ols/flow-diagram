@@ -99,6 +99,9 @@ function CanvasInner() {
         minZoom={0.2}
         maxZoom={2.5}
         proOptions={{ hideAttribution: false }}
+        // Whiteboard-style gestures: two-finger swipe pans, pinch zooms.
+        panOnScroll
+        zoomOnScroll={false}
       >
         <Background variant={BackgroundVariant.Dots} gap={22} size={1} color="var(--canvas-dot)" />
       </ReactFlow>
