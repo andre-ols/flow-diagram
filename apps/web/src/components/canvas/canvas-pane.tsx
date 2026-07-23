@@ -14,8 +14,11 @@ import {
 import { layoutFlow, sizeOf } from "@flow/layout";
 import { selectDisplayIr, useStudioStore } from "@/store/studio-store";
 import { CanvasControls } from "./canvas-controls";
+import { LoopEdge, type LoopEdgeData } from "./loop-edge";
 import { nodeTypeFor, nodeTypes, type FlowNodeData } from "./node-types";
 import "@xyflow/react/dist/style.css";
+
+const edgeTypes = { loop: LoopEdge };
 
 function CanvasInner() {
   const ir = useStudioStore(selectDisplayIr);
@@ -49,20 +52,27 @@ function CanvasInner() {
     });
   }, [ir, layout, manualPositions, selectedNodeId]);
 
-  const edges = useMemo<Edge[]>(() => {
+  const edges = useMemo<Edge<LoopEdgeData>[]>(() => {
     const flow = ir.flows.find((candidate) => candidate.id === activeFlowId);
     if (!flow) return [];
+    // Cards a backward edge (a call returning to its caller) must clear
+    // before it can loop back into its target's left handle.
+    const maxBottom = derivedNodes.reduce((max, node) => {
+      const height = typeof node.style?.height === "number" ? node.style.height : 0;
+      return Math.max(max, node.position.y + height);
+    }, 0);
     return flow.edges.map((edge, index) => ({
       id: `${edge.from}-${edge.to}-${index}`,
       source: edge.from,
       target: edge.to,
       label: edge.label,
-      type: "smoothstep",
+      type: "loop",
       animated: true,
       labelStyle: { fontSize: 10.5, fontWeight: 600 },
       labelBgStyle: { fill: "var(--card)" },
+      data: { maxBottom },
     }));
-  }, [ir, activeFlowId]);
+  }, [ir, activeFlowId, derivedNodes]);
 
   // React Flow owns the transient drag state so a card follows the cursor
   // smoothly without rebuilding the whole graph (and without flickering edge
@@ -91,6 +101,7 @@ function CanvasInner() {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onNodeClick={(_, node) => selectNode(node.id)}
         onPaneClick={() => selectNode(null)}
