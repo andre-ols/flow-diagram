@@ -15,7 +15,7 @@ export function HttpNode({ data, selected }: NodeProps<FlowNode>) {
   );
 
   return (
-    <NodeShell kind="http" selected={selected}>
+    <NodeShell kind="http" selected={selected} tag={node.props.label}>
       {exchange ? (
         <div className="flex items-center gap-2">
           <span

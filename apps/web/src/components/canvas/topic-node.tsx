@@ -9,7 +9,7 @@ type FlowNode = Node<FlowNodeData>;
 export function TopicNode({ data, selected }: NodeProps<FlowNode>) {
   const { node } = data;
   return (
-    <NodeShell kind="topic" selected={selected}>
+    <NodeShell kind="topic" selected={selected} tag={node.props.label}>
       {/* A topic's name is its address, so it reads as code rather than prose. */}
       <div className="truncate font-mono text-[12.5px] font-semibold leading-tight">
         {node.label}

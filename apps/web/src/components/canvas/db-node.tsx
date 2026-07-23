@@ -16,7 +16,7 @@ export function DbNode({ data, selected }: NodeProps<FlowNode>) {
   const count = model?.tables.length ?? 0;
 
   return (
-    <NodeShell kind="db" selected={selected}>
+    <NodeShell kind="db" selected={selected} tag={node.props.label}>
       <NodeTitle>{node.label}</NodeTitle>
       <NodeSubtitle>
         <span className="flex items-center gap-1.5">

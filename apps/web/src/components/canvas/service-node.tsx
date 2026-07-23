@@ -11,7 +11,7 @@ export function ServiceNode({ data, selected }: NodeProps<FlowNode>) {
   const isExternal = node.props.external === "true";
 
   return (
-    <NodeShell kind="service" selected={selected}>
+    <NodeShell kind="service" selected={selected} tag={node.props.label}>
       <NodeTitle>{node.label}</NodeTitle>
       {node.props.desc ? <NodeSubtitle>{node.props.desc}</NodeSubtitle> : null}
       {isExternal ? (

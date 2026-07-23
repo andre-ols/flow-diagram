@@ -37,7 +37,7 @@ export function ScreenNode({ data, selected }: NodeProps<FlowNode>) {
   }, []);
 
   return (
-    <NodeShell kind="screen" selected={selected}>
+    <NodeShell kind="screen" selected={selected} tag={node.props.label}>
       <NodeTitle>{node.label}</NodeTitle>
       <div
         className="flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-md border border-dashed bg-muted/40"

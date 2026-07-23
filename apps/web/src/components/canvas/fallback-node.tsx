@@ -14,7 +14,7 @@ type FlowNode = Node<FlowNodeData>;
 export function FallbackNode({ data, selected }: NodeProps<FlowNode>) {
   const { node } = data;
   return (
-    <NodeShell kind={node.kind} selected={selected}>
+    <NodeShell kind={node.kind} selected={selected} tag={node.props.label}>
       <NodeTitle>{node.label}</NodeTitle>
       <NodeSubtitle>{node.props.desc ?? node.kind}</NodeSubtitle>
     </NodeShell>
