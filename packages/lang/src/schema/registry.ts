@@ -12,13 +12,15 @@ import { createRegistry, type NodeTypeDef, type NodeTypeRegistry, type PropDef }
 export const FLOW_KEYWORD = "flow";
 
 const DESC: PropDef = { name: "desc", kind: "string" };
+/** An optional free-text tag shown as a coloured chip on every component. */
+const LABEL: PropDef = { name: "label", kind: "string" };
 
 const screen: NodeTypeDef = {
   keyword: "screen",
   label: "SCREEN",
   colorToken: "--kind-screen",
   entryMode: "properties",
-  props: [DESC, { name: "image", kind: "string" }],
+  props: [LABEL, DESC, { name: "image", kind: "string" }],
   blocks: [],
   toArtifacts(block) {
     const src = propValue(block, "image");
@@ -32,7 +34,7 @@ const service: NodeTypeDef = {
   label: "SERVICE",
   colorToken: "--kind-service",
   entryMode: "properties",
-  props: [DESC, { name: "external", kind: "boolean" }],
+  props: [LABEL, DESC, { name: "external", kind: "boolean" }],
   blocks: [],
   toArtifacts: () => [],
 };
@@ -43,6 +45,7 @@ const http: NodeTypeDef = {
   colorToken: "--kind-http",
   entryMode: "properties",
   props: [
+    LABEL,
     DESC,
     {
       name: "method",
@@ -112,7 +115,7 @@ const db: NodeTypeDef = {
   colorToken: "--kind-db",
   entryMode: "properties",
   allowRefs: true,
-  props: [DESC],
+  props: [LABEL, DESC],
   blocks: [{ keyword: "table", arity: "many", entryMode: "fields", props: [] }],
   toArtifacts(block) {
     const tables: ErTable[] = nestedBlocks(block, "table").map((table) => ({
@@ -143,6 +146,7 @@ const topic: NodeTypeDef = {
   colorToken: "--kind-topic",
   entryMode: "properties",
   props: [
+    LABEL,
     DESC,
     // Free text on purpose: moving from Kafka to SQS must never require a new
     // node type.
