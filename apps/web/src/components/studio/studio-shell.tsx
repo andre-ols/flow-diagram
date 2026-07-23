@@ -3,6 +3,7 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { CanvasPane } from "@/components/canvas/canvas-pane";
 import { NodeDetailDialog } from "@/components/detail/node-detail-dialog";
+import { NodeFocusMode } from "@/components/detail/node-focus-mode";
 import { EditorPane } from "@/components/editor/editor-pane";
 import { StatusBar } from "./status-bar";
 import { StudioHeader } from "./studio-header";
@@ -22,6 +23,7 @@ export function StudioShell() {
       </ResizablePanelGroup>
       <StatusBar />
       <NodeDetailDialog />
+      <NodeFocusMode />
     </div>
   );
 }

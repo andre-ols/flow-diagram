@@ -31,7 +31,10 @@ export interface StudioState {
   /** The most recent renderable IR. Drives the canvas when `ir` is unusable. */
   lastValidIr: DiagramIR;
   activeFlowId: string | null;
+  /** The node whose compact detail modal is open, if any. */
   selectedNodeId: string | null;
+  /** The node blown up into full-screen focus mode, if any. */
+  focusNodeId: string | null;
   manualPositions: Record<string, Point>;
   /** Pasted mockups, keyed by node id. Deliberately not part of the DSL text. */
   screenImages: Record<string, string>;
@@ -39,6 +42,10 @@ export interface StudioState {
   setSource: (source: string) => void;
   setActiveFlow: (flowId: string) => void;
   selectNode: (nodeId: string | null) => void;
+  /** Promote the selected node from its modal into full-screen focus mode. */
+  enterFocus: () => void;
+  /** Leave focus mode straight back to the board — not back to the modal. */
+  exitFocus: () => void;
   setNodePosition: (nodeId: string, position: Point) => void;
   resetLayout: () => void;
   setScreenImage: (nodeId: string, dataUrl: string) => void;
@@ -54,6 +61,7 @@ export const useStudioStore = create<StudioState>()(
       lastValidIr: initialIr,
       activeFlowId: initialIr.flows[0]?.id ?? null,
       selectedNodeId: null,
+      focusNodeId: null,
       manualPositions: {},
       screenImages: {},
 
@@ -69,9 +77,14 @@ export const useStudioStore = create<StudioState>()(
           return { source, ir, lastValidIr, activeFlowId };
         }),
 
-      setActiveFlow: (flowId) => set({ activeFlowId: flowId, selectedNodeId: null }),
+      setActiveFlow: (flowId) =>
+        set({ activeFlowId: flowId, selectedNodeId: null, focusNodeId: null }),
 
-      selectNode: (nodeId) => set({ selectedNodeId: nodeId }),
+      selectNode: (nodeId) => set({ selectedNodeId: nodeId, focusNodeId: null }),
+
+      enterFocus: () => set((state) => ({ focusNodeId: state.selectedNodeId })),
+
+      exitFocus: () => set({ selectedNodeId: null, focusNodeId: null }),
 
       setNodePosition: (nodeId, position) =>
         set((state) => ({ manualPositions: { ...state.manualPositions, [nodeId]: position } })),

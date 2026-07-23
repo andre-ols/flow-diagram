@@ -16,7 +16,23 @@ function rowCentre(index: number): number {
   return ER_HEADER_HEIGHT + index * ER_ROW_HEIGHT + ER_ROW_HEIGHT / 2;
 }
 
+/** The bordered, scrollable frame used when the ER model is embedded inline. */
 export function ErModelView({ artifact }: { artifact: ErModelArtifact }) {
+  if (artifact.tables.length === 0) {
+    return <p className="text-sm text-muted-foreground">This database declares no tables yet.</p>;
+  }
+  return (
+    <div className="w-full max-h-[64vh] overflow-auto rounded-lg border bg-muted/20 p-4">
+      <ErModelDiagram artifact={artifact} />
+    </div>
+  );
+}
+
+/**
+ * The ER diagram at its natural pixel size, with no scroll frame of its own.
+ * Kept separate so focus mode can drop it straight into a pan/zoom viewport.
+ */
+export function ErModelDiagram({ artifact }: { artifact: ErModelArtifact }) {
   const layout = useMemo(() => layoutErModel(artifact), [artifact]);
 
   if (artifact.tables.length === 0) {
@@ -30,9 +46,8 @@ export function ErModelView({ artifact }: { artifact: ErModelArtifact }) {
   };
 
   return (
-    <div className="w-full max-h-[64vh] overflow-auto rounded-lg border bg-muted/20 p-4">
-      <div className="relative" style={{ width: layout.width, height: layout.height }}>
-        <svg
+    <div className="relative" style={{ width: layout.width, height: layout.height }}>
+      <svg
           width={layout.width}
           height={layout.height}
           className="pointer-events-none absolute left-0 top-0 overflow-visible"
@@ -116,7 +131,6 @@ export function ErModelView({ artifact }: { artifact: ErModelArtifact }) {
             </div>
           );
         })}
-      </div>
     </div>
   );
 }
