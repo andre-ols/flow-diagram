@@ -2,6 +2,7 @@
 
 import { useCallback, type ClipboardEvent, type DragEvent } from "react";
 import { Maximize2 } from "lucide-react";
+import { LabelChip } from "@/components/label-chip";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { firstImageFile, isDisplayableImageSrc, readImageFileAsDataUrl } from "@/lib/image-io";
@@ -87,6 +88,9 @@ export function NodeDetailDialog() {
             </div>
             <DialogTitle className="truncate text-lg">{node?.label ?? ""}</DialogTitle>
           </div>
+          {node?.props.label ? (
+            <LabelChip label={node.props.label} color={meta.color} className="shrink-0" />
+          ) : null}
           {canFocus ? (
             <Button
               variant="outline"

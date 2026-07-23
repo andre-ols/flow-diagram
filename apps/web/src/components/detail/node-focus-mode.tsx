@@ -3,6 +3,7 @@
 import { useCallback, type ClipboardEvent, type DragEvent } from "react";
 import type { ErModelArtifact } from "@flow/lang";
 import { Minimize2 } from "lucide-react";
+import { LabelChip } from "@/components/label-chip";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { firstImageFile, isDisplayableImageSrc, readImageFileAsDataUrl } from "@/lib/image-io";
@@ -83,6 +84,9 @@ export function NodeFocusMode() {
             </div>
             <DialogTitle className="truncate text-lg">{node?.label ?? ""}</DialogTitle>
           </div>
+          {node?.props.label ? (
+            <LabelChip label={node.props.label} color={meta.color} className="shrink-0" />
+          ) : null}
           <Button
             variant="ghost"
             size="icon-sm"
