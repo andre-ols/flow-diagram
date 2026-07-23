@@ -123,9 +123,20 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Slightly calmer mono rendering for UI copy. */
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    letter-spacing: -0.006em;
   }
+  /* Code-first tool → mono is the workhorse; sans is reserved for headings. */
   html {
-    @apply font-sans;
+    @apply font-mono;
+  }
+  h1,
+  h2,
+  h3,
+  .font-heading {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
 }
 
@@ -138,6 +149,8 @@
   --kind-topic: oklch(0.58 0.13 24);
   --kind-default: oklch(0.55 0.02 250);
   --canvas-dot: oklch(0.88 0.006 250);
+  --edge: oklch(0.62 0.02 260);
+  --edge-strong: oklch(0.45 0.03 260);
 }
 
 .dark {
@@ -148,10 +161,64 @@
   --kind-topic: oklch(0.72 0.14 24);
   --kind-default: oklch(0.7 0.02 250);
   --canvas-dot: oklch(0.32 0.008 250);
+  --edge: oklch(0.72 0.02 260);
+  --edge-strong: oklch(0.9 0.02 260);
 }
 
 html,
 body {
   height: 100%;
   overflow: hidden;
+}
+
+/* Thin, unobtrusive scrollbars everywhere native ones show through. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--foreground) 22%, transparent) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--foreground) 22%, transparent);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* A hair of depth on the canvas so nodes read above the surface. */
+.react-flow__renderer {
+  background:
+    radial-gradient(
+      120% 120% at 50% 0%,
+      color-mix(in oklch, var(--foreground) 3%, transparent),
+      transparent 60%
+    );
+}
+
+/* React Flow edges pick up the theme instead of its hard-coded grey.
+   !important is needed to win over the library's own injected stylesheet. */
+.react-flow__edge-path {
+  stroke: var(--edge) !important;
+  stroke-width: 1.5px !important;
+}
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--edge-strong) !important;
+}
+/* Marker arrowheads, if any, match the line. */
+.react-flow__arrowhead * {
+  fill: var(--edge) !important;
+  stroke: var(--edge) !important;
+}
+/* Edge labels: React Flow defaults the text to black, which is invisible on
+   the dark label background. Follow the theme foreground instead. */
+.react-flow__edge-text {
+  fill: var(--foreground) !important;
+}
+.react-flow__attribution {
+  background: transparent;
+  opacity: 0.4;
 }

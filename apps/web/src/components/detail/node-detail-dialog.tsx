@@ -33,7 +33,10 @@ export function NodeDetailDialog() {
 
   return (
     <Dialog open={Boolean(node)} onOpenChange={(open) => !open && selectNode(null)}>
-      <DialogContent className="max-h-[86vh] max-w-3xl gap-0 overflow-hidden p-0" onPaste={onPaste}>
+      <DialogContent
+        className="max-h-[88vh] w-full gap-0 overflow-hidden p-0 sm:max-w-5xl"
+        onPaste={onPaste}
+      >
         <DialogHeader className="flex-row items-center gap-3 space-y-0 border-b px-5 py-4">
           <span className="size-2.5 shrink-0 rounded-sm" style={{ background: meta.color }} />
           <div className="min-w-0">

@@ -30,7 +30,7 @@ export function ErModelView({ artifact }: { artifact: ErModelArtifact }) {
   };
 
   return (
-    <div className="overflow-auto">
+    <div className="w-full max-h-[64vh] overflow-auto rounded-lg border bg-muted/20 p-4">
       <div className="relative" style={{ width: layout.width, height: layout.height }}>
         <svg
           width={layout.width}

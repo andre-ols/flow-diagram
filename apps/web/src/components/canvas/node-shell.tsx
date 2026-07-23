@@ -18,8 +18,11 @@ export function NodeShell({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow",
-        selected ? "ring-2 ring-offset-1 ring-offset-background" : "hover:shadow-md",
+        "flex h-full w-full flex-col overflow-hidden rounded-xl border bg-card ring-1 ring-black/[0.04] transition-all duration-150 dark:ring-white/[0.06]",
+        "shadow-[0_1px_2px_0_color-mix(in_oklch,var(--foreground)_10%,transparent)]",
+        selected
+          ? "ring-2 ring-offset-2 ring-offset-background"
+          : "hover:shadow-[0_6px_16px_-4px_color-mix(in_oklch,var(--foreground)_22%,transparent)]",
       )}
       style={selected ? ({ "--tw-ring-color": meta.color } as CSSProperties) : undefined}
     >

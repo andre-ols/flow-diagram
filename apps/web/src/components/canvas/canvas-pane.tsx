@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import {
   Background,
   BackgroundVariant,
-  MiniMap,
   ReactFlow,
   ReactFlowProvider,
   type Edge,
@@ -12,7 +11,6 @@ import {
   type NodeChange,
 } from "@xyflow/react";
 import { layoutFlow, sizeOf } from "@flow/layout";
-import { kindMeta } from "@/lib/kind-styles";
 import { selectDisplayIr, useStudioStore } from "@/store/studio-store";
 import { CanvasControls } from "./canvas-controls";
 import { nodeTypeFor, nodeTypes, type FlowNodeData } from "./node-types";
@@ -86,12 +84,6 @@ function CanvasInner() {
         proOptions={{ hideAttribution: false }}
       >
         <Background variant={BackgroundVariant.Dots} gap={22} size={1} color="var(--canvas-dot)" />
-        <MiniMap
-          pannable
-          zoomable
-          className="!bottom-16 !right-4 !h-24 !w-40 rounded-lg border"
-          nodeColor={(node) => kindMeta((node.data as FlowNodeData).node.kind).color}
-        />
       </ReactFlow>
       <CanvasControls />
     </div>
