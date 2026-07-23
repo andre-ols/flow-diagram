@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   Background,
   BackgroundVariant,
   ReactFlow,
   ReactFlowProvider,
+  useNodesState,
   type Edge,
   type Node,
   type NodeChange,
@@ -26,7 +27,10 @@ function CanvasInner() {
 
   const layout = useMemo(() => layoutFlow(ir, activeFlowId ?? ""), [ir, activeFlowId]);
 
-  const nodes = useMemo<Node<FlowNodeData>[]>(() => {
+  // Nodes derived from the IR, layout, committed positions and selection. This
+  // is the source of truth; live drag positions live only in React Flow's local
+  // state below until the drag ends, so mid-drag frames never rebuild this.
+  const derivedNodes = useMemo<Node<FlowNodeData>[]>(() => {
     return Object.keys(layout.positions).flatMap((id) => {
       const node = ir.nodes.find((candidate) => candidate.id === id);
       const auto = layout.positions[id];
@@ -60,13 +64,26 @@ function CanvasInner() {
     }));
   }, [ir, activeFlowId]);
 
-  const onNodesChange = (changes: NodeChange[]) => {
-    for (const change of changes) {
-      if (change.type === "position" && change.position && change.dragging === false) {
-        setNodePosition(change.id, change.position);
+  // React Flow owns the transient drag state so a card follows the cursor
+  // smoothly without rebuilding the whole graph (and without flickering edge
+  // labels) on every frame. We only commit the final position to the store.
+  const [nodes, setNodes, onNodesChangeInternal] = useNodesState<Node<FlowNodeData>>(derivedNodes);
+
+  useEffect(() => {
+    setNodes(derivedNodes);
+  }, [derivedNodes, setNodes]);
+
+  const onNodesChange = useCallback(
+    (changes: NodeChange<Node<FlowNodeData>>[]) => {
+      onNodesChangeInternal(changes);
+      for (const change of changes) {
+        if (change.type === "position" && change.position && change.dragging === false) {
+          setNodePosition(change.id, change.position);
+        }
       }
-    }
-  };
+    },
+    [onNodesChangeInternal, setNodePosition],
+  );
 
   return (
     <div className="relative h-full w-full">
