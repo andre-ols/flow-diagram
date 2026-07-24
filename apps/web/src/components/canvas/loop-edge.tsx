@@ -1,10 +1,13 @@
 "use client";
 
 import { BaseEdge, getSmoothStepPath, type Edge, type EdgeProps } from "@xyflow/react";
+import { EdgeLabel } from "./edge-label";
 
 export interface LoopEdgeData extends Record<string, unknown> {
   /** Bottom-most y (in flow coordinates) reached by any card in the diagram. */
   maxBottom: number;
+  /** Numerical order of execution */
+  executionOrder: number;
 }
 
 export type LoopEdge = Edge<LoopEdgeData>;
@@ -49,17 +52,20 @@ export function LoopEdge({
   });
 
   return (
-    <BaseEdge
-      id={id}
-      path={path}
-      labelX={labelX}
-      labelY={labelY}
-      label={label}
-      labelStyle={labelStyle}
-      labelBgStyle={labelBgStyle}
-      style={style}
-      markerEnd={markerEnd}
-      markerStart={markerStart}
-    />
+    <>
+      <BaseEdge
+        id={id}
+        path={path}
+        style={style}
+        markerEnd={markerEnd}
+        markerStart={markerStart}
+      />
+      <EdgeLabel
+        labelX={labelX}
+        labelY={labelY}
+        label={label}
+        executionOrder={data?.executionOrder}
+      />
+    </>
   );
 }

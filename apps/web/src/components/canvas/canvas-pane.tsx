@@ -68,9 +68,7 @@ function CanvasInner() {
       label: edge.label,
       type: "loop",
       animated: true,
-      labelStyle: { fontSize: 10.5, fontWeight: 600 },
-      labelBgStyle: { fill: "var(--card)" },
-      data: { maxBottom },
+      data: { maxBottom, executionOrder: index + 1 },
     }));
   }, [ir, activeFlowId, derivedNodes]);
 
