@@ -4,18 +4,21 @@ import { EdgeLabelRenderer } from "@xyflow/react";
 import type { ReactNode } from "react";
 
 export interface EdgeLabelProps {
+  edgeId: string;
   labelX: number;
   labelY: number;
   label?: string | ReactNode;
   executionOrder?: number;
 }
 
-export function EdgeLabel({ labelX, labelY, label, executionOrder }: EdgeLabelProps) {
+export function EdgeLabel({ edgeId, labelX, labelY, label, executionOrder }: EdgeLabelProps) {
   if (!label && executionOrder === undefined) return null;
 
   return (
     <EdgeLabelRenderer>
       <div
+        data-edge-id={edgeId}
+        className="canvas-edge-label nodrag nopan"
         style={{
           position: "absolute",
           transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
@@ -24,10 +27,10 @@ export function EdgeLabel({ labelX, labelY, label, executionOrder }: EdgeLabelPr
           alignItems: "center",
           gap: "4px",
         }}
-        className="nodrag nopan"
       >
         {executionOrder !== undefined && (
           <div
+            className="edge-label-circle"
             style={{
               width: "18px",
               height: "18px",

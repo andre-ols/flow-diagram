@@ -151,6 +151,8 @@
   --canvas-dot: oklch(0.88 0.006 250);
   --edge: oklch(0.62 0.02 260);
   --edge-strong: oklch(0.45 0.03 260);
+  --edge-outgoing: oklch(0.65 0.15 150);
+  --edge-incoming: oklch(0.6 0.15 250);
 }
 
 .dark {
@@ -163,6 +165,8 @@
   --canvas-dot: oklch(0.32 0.008 250);
   --edge: oklch(0.72 0.02 260);
   --edge-strong: oklch(0.9 0.02 260);
+  --edge-outgoing: oklch(0.7 0.15 150);
+  --edge-incoming: oklch(0.65 0.15 250);
 }
 
 html,
@@ -221,4 +225,45 @@ body {
 .react-flow__attribution {
   background: transparent;
   opacity: 0.4;
+}
+
+/* Base transition for smooth hover effects */
+.react-flow__node, .react-flow__edge, .canvas-edge-label {
+  transition: opacity 0.2s, stroke 0.2s;
+}
+.edge-label-circle {
+  transition: background-color 0.2s;
+}
+
+/* When board has hover, dim everything not in focus */
+.canvas-has-hover .react-flow__node:not(.canvas-focus),
+.canvas-has-hover .react-flow__edge:not(.canvas-focus),
+.canvas-has-hover .canvas-edge-label:not(.canvas-focus) {
+  opacity: 0.25;
+}
+
+/* Outgoing edges become green */
+.canvas-has-hover .react-flow__edge.edge-outgoing .react-flow__edge-path {
+  stroke: var(--edge-outgoing) !important;
+  stroke-width: 2.5px !important;
+}
+.canvas-has-hover .react-flow__edge.edge-outgoing .react-flow__arrowhead * {
+  stroke: var(--edge-outgoing) !important;
+  fill: var(--edge-outgoing) !important;
+}
+.canvas-has-hover .canvas-edge-label.edge-outgoing .edge-label-circle {
+  background-color: var(--edge-outgoing) !important;
+}
+
+/* Incoming edges become blue */
+.canvas-has-hover .react-flow__edge.edge-incoming .react-flow__edge-path {
+  stroke: var(--edge-incoming) !important;
+  stroke-width: 2.5px !important;
+}
+.canvas-has-hover .react-flow__edge.edge-incoming .react-flow__arrowhead * {
+  stroke: var(--edge-incoming) !important;
+  fill: var(--edge-incoming) !important;
+}
+.canvas-has-hover .canvas-edge-label.edge-incoming .edge-label-circle {
+  background-color: var(--edge-incoming) !important;
 }

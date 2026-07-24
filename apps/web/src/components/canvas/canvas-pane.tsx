@@ -93,6 +93,69 @@ function CanvasInner() {
     [onNodesChangeInternal, setNodePosition],
   );
 
+  const onNodeMouseEnter = useCallback((_, node: Node) => {
+    const container = document.querySelector('.react-flow');
+    if (!container) return;
+    container.classList.add('canvas-has-hover');
+
+    const focusNodes = new Set([node.id]);
+    const outgoingEdges = new Set<string>();
+    const incomingEdges = new Set<string>();
+
+    edges.forEach(e => {
+      if (e.source === node.id) {
+        outgoingEdges.add(e.id);
+        focusNodes.add(e.target);
+      } else if (e.target === node.id) {
+        incomingEdges.add(e.id);
+        focusNodes.add(e.source);
+      }
+    });
+
+    document.querySelectorAll('.react-flow__node').forEach(el => {
+      const id = el.getAttribute('data-id');
+      if (id && focusNodes.has(id)) {
+        el.classList.add('canvas-focus');
+      } else {
+        el.classList.remove('canvas-focus');
+      }
+    });
+
+    document.querySelectorAll('.react-flow__edge').forEach(el => {
+      const id = el.getAttribute('data-id');
+      el.classList.remove('canvas-focus', 'edge-outgoing', 'edge-incoming');
+      if (id) {
+        if (outgoingEdges.has(id)) {
+          el.classList.add('canvas-focus', 'edge-outgoing');
+        } else if (incomingEdges.has(id)) {
+          el.classList.add('canvas-focus', 'edge-incoming');
+        }
+      }
+    });
+
+    document.querySelectorAll('.canvas-edge-label').forEach(el => {
+      const id = el.getAttribute('data-edge-id');
+      el.classList.remove('canvas-focus', 'edge-outgoing', 'edge-incoming');
+      if (id) {
+        if (outgoingEdges.has(id)) {
+          el.classList.add('canvas-focus', 'edge-outgoing');
+        } else if (incomingEdges.has(id)) {
+          el.classList.add('canvas-focus', 'edge-incoming');
+        }
+      }
+    });
+  }, [edges]);
+
+  const onNodeMouseLeave = useCallback(() => {
+    const container = document.querySelector('.react-flow');
+    if (!container) return;
+    container.classList.remove('canvas-has-hover');
+    
+    document.querySelectorAll('.react-flow__node').forEach(el => el.classList.remove('canvas-focus'));
+    document.querySelectorAll('.react-flow__edge').forEach(el => el.classList.remove('canvas-focus', 'edge-outgoing', 'edge-incoming'));
+    document.querySelectorAll('.canvas-edge-label').forEach(el => el.classList.remove('canvas-focus', 'edge-outgoing', 'edge-incoming'));
+  }, []);
+
   return (
     <div className="relative h-full w-full">
       <ReactFlow
@@ -102,6 +165,8 @@ function CanvasInner() {
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onNodeClick={(_, node) => selectNode(node.id)}
+        onNodeMouseEnter={onNodeMouseEnter}
+        onNodeMouseLeave={onNodeMouseLeave}
         onPaneClick={() => selectNode(null)}
         fitView
         fitViewOptions={{ padding: 0.2 }}

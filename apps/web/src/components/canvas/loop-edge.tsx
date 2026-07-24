@@ -61,6 +61,7 @@ export function LoopEdge({
         markerStart={markerStart}
       />
       <EdgeLabel
+        edgeId={id}
         labelX={labelX}
         labelY={labelY}
         label={label}
