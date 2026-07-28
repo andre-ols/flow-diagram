@@ -54,7 +54,13 @@ export function layoutFlow(ir: DiagramIR, flowId: string): LayoutResult {
   const kinds = new Map(nodes.map((node) => [node.id, node.kind]));
   for (const node of nodes) graph.setNode(node.id, { ...sizeOf(node.kind) });
   for (const edge of flow.edges) {
-    if (kinds.has(edge.from) && kinds.has(edge.to)) graph.setEdge(edge.from, edge.to);
+    if (kinds.has(edge.from) && kinds.has(edge.to)) {
+      let labelWidth = 22; // 18px execution order circle + 4px gap
+      if (edge.label) {
+        labelWidth += edge.label.length * 7.5 + 24; // approximate character width + padding
+      }
+      graph.setEdge(edge.from, edge.to, { width: labelWidth, height: 32 });
+    }
   }
 
   dagre.layout(graph);
