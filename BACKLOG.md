@@ -46,8 +46,6 @@ into. Each becomes a module in a new `@flow/adapters` package with the shape
 ## Editor & canvas
 
 - **Export PNG / SVG** of the canvas, for pasting into Confluence, Notion, PRs.
-- **Share by URL** — DSL compressed into the URL hash, no backend needed
-  (the mermaid.live model).
 - **Autocomplete in the editor** — node ids inside `flow` blocks, keywords,
   property names. The registry already has the data for this.
 - **Hover cards** — preview a node's payload on hover in the canvas.

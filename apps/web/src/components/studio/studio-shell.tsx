@@ -6,11 +6,13 @@ import { NodeDetailDialog } from "@/components/detail/node-detail-dialog";
 import { NodeFocusMode } from "@/components/detail/node-focus-mode";
 import { EditorPane } from "@/components/editor/editor-pane";
 import { StatusBar } from "./status-bar";
+import { SharedFlowLoader } from "./shared-flow-loader";
 import { StudioHeader } from "./studio-header";
 
 export function StudioShell() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
+      <SharedFlowLoader />
       <StudioHeader />
       <ResizablePanelGroup orientation="horizontal" className="min-h-0 flex-1">
         <ResizablePanel defaultSize="32" minSize="20" maxSize="55">

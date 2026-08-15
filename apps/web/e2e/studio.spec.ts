@@ -63,3 +63,34 @@ test("a syntax error keeps the last valid diagram on screen", async ({ page }) =
   await expect(page.getByText(/last valid diagram/i)).toBeVisible();
   await expect(canvas.getByText("Order Service")).toBeVisible();
 });
+
+test("shares the current DSL by URL and loads it over the locally saved diagram", async ({
+  context,
+  page,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  const editor = page.locator(".cm-content");
+
+  await editor.click();
+  await page.keyboard.press("ControlOrMeta+a");
+  await page.keyboard.type(
+    'service Shared "Shared Service" {}\nflow SharedFlow "Shared flow" {\n  Shared -> Shared\n}',
+  );
+  await expect(page.locator(".react-flow").getByText("Shared Service")).toBeVisible();
+
+  await page.getByRole("button", { name: "Share", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
+  const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
+
+  await editor.click();
+  await page.keyboard.press("ControlOrMeta+a");
+  await page.keyboard.type(
+    'service Local "Local Service" {}\nflow LocalFlow "Local flow" {\n  Local -> Local\n}',
+  );
+  await expect(page.locator(".react-flow").getByText("Local Service")).toBeVisible();
+
+  await page.goto(sharedUrl);
+
+  await expect(page.locator(".react-flow").getByText("Shared Service")).toBeVisible();
+  await expect(page.locator(".react-flow").getByText("Local Service")).toBeHidden();
+});

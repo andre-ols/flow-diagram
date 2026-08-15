@@ -5,6 +5,7 @@ import { Download, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FILE_EXTENSION, downloadText, readTextFile } from "@/lib/file-io";
 import { useStudioStore } from "@/store/studio-store";
+import { ShareButton } from "./share-button";
 
 export function IoButtons() {
   const input = useRef<HTMLInputElement>(null);
@@ -37,6 +38,7 @@ export function IoButtons() {
         <Download className="mr-1.5 size-3.5" />
         Export
       </Button>
+      <ShareButton />
     </div>
   );
 }

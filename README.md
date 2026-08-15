@@ -16,6 +16,9 @@ pnpm install
 pnpm dev          # http://localhost:3000
 ```
 
+Use **Share** in the studio header to copy a self-contained link. The DSL is
+compressed into the URL hash, so opening the link needs no account or backend.
+
 ## The language
 
 ```
@@ -91,4 +94,4 @@ pnpm lint         # eslint, incl. the no-DOM boundary rule
 ## What is not here yet
 
 See [BACKLOG.md](BACKLOG.md) — Mermaid/DBML/OpenAPI adapters, PNG export,
-share-by-URL, server persistence, collaboration.
+server persistence, collaboration.
