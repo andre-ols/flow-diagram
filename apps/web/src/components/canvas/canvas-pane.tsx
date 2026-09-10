@@ -93,7 +93,7 @@ function CanvasInner() {
     [onNodesChangeInternal, setNodePosition],
   );
 
-  const onNodeMouseEnter = useCallback((_, node: Node) => {
+  const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
     const container = document.querySelector('.react-flow');
     if (!container) return;
     container.classList.add('canvas-has-hover');
